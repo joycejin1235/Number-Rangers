@@ -3,21 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#f5f8ef">
-    <title>Number Rangers — Math Quest</title>
+    <meta name="theme-color" content="#f7f8f3">
+    <meta name="description" content="Practice real-world money decisions with classroom-ready games and quick financial literacy quizzes.">
+    <title>Money Mentors — Real-life money practice</title>
     <style>
       :root {
         color-scheme: light;
-        --ink: #18382e;
-        --muted: #668077;
-        --green: #26734f;
-        --green-dark: #1d5d40;
-        --lime: #d9f27b;
+        --ink: #172b27;
+        --muted: #697a73;
+        --green: #176b50;
+        --green-dark: #10563f;
+        --mint: #e6f3e9;
+        --lime: #c7ec83;
         --paper: #fffefa;
-        --canvas: #f5f8ef;
-        --line: #e4eadc;
-        --orange: #e9894c;
-        --shadow: 0 18px 55px rgb(35 72 49 / 10%);
+        --canvas: #f7f8f3;
+        --line: #e5e9e0;
+        --orange: #e88853;
+        --shadow: 0 18px 55px rgb(32 57 44 / 8%);
         font-family: "Trebuchet MS", "Segoe UI", sans-serif;
       }
 
@@ -29,23 +31,25 @@
         margin: 0;
         color: var(--ink);
         background:
-          radial-gradient(ellipse at 5% 10%, rgb(217 242 123 / 28%), transparent 27rem),
-          radial-gradient(ellipse at 95% 90%, rgb(196 229 195 / 32%), transparent 30rem),
+          radial-gradient(ellipse at 2% 0%, rgb(199 236 131 / 20%), transparent 27rem),
+          radial-gradient(ellipse at 100% 55%, rgb(220 238 218 / 40%), transparent 31rem),
           var(--canvas);
       }
 
-      button { font: inherit; }
-
-      .page {
-        width: min(100% - 36px, 1080px);
-        margin-inline: auto;
+      button, select { font: inherit; }
+      button { color: inherit; }
+      button:focus-visible, select:focus-visible, a:focus-visible {
+        outline: 3px solid #e9a568;
+        outline-offset: 3px;
       }
 
+      .page { width: min(100% - 40px, 1160px); margin-inline: auto; }
       .topbar {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-block: 25px;
+        gap: 24px;
+        min-height: 82px;
       }
 
       .brand {
@@ -53,303 +57,472 @@
         align-items: center;
         gap: 11px;
         color: var(--ink);
-        font-size: 1.08rem;
+        font-size: 1.1rem;
         font-weight: 900;
-        letter-spacing: -.035em;
+        letter-spacing: -.04em;
         text-decoration: none;
       }
 
       .brand-mark {
         display: grid;
-        width: 39px;
-        height: 39px;
+        width: 40px;
+        height: 40px;
         place-items: center;
-        border-radius: 13px;
+        border-radius: 14px;
         background: var(--lime);
-        font-size: 1.3rem;
-      }
-
-      .top-note {
-        color: var(--muted);
-        font-size: .9rem;
-        font-weight: 700;
-      }
-
-      main { padding-block: 22px 64px; }
-
-      .intro {
-        max-width: 660px;
-        margin: 0 auto 27px;
-        text-align: center;
-      }
-
-      .eyebrow {
-        display: inline-block;
-        margin-bottom: 10px;
-        color: var(--green);
-        font-size: .76rem;
+        color: var(--green-dark);
+        font-size: 1.4rem;
         font-weight: 900;
-        letter-spacing: .15em;
-        text-transform: uppercase;
       }
 
-      h1 {
-        margin: 0;
-        font-size: clamp(2.25rem, 5vw, 3.75rem);
-        font-weight: 900;
-        letter-spacing: -.065em;
-        line-height: 1.02;
-      }
-
-      .intro p {
-        max-width: 480px;
-        margin: 13px auto 0;
-        color: var(--muted);
-        font-size: 1.03rem;
-        line-height: 1.6;
-      }
-
-      .game-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) 245px;
-        gap: 19px;
-        align-items: stretch;
-        max-width: 900px;
-        margin: 0 auto;
-      }
-
-      .game-card, .side-card {
-        border: 1px solid rgb(228 234 220 / 85%);
-        border-radius: 25px;
+      .topbar-right { display: flex; align-items: center; gap: 21px; }
+      .class-note { color: var(--muted); font-size: .86rem; font-weight: 700; }
+      .mode-switch {
+        display: inline-flex;
+        gap: 3px;
+        padding: 4px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
         background: var(--paper);
-        box-shadow: var(--shadow);
       }
 
-      .game-card { padding: clamp(21px, 4vw, 36px); }
-
-      .game-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 12px;
-        margin-bottom: 13px;
-      }
-
-      .round-label {
-        color: var(--muted);
-        font-size: .87rem;
+      .mode-button, .tab-button, .game-choice, .topic-button {
+        border: 0;
+        cursor: pointer;
         font-weight: 800;
       }
 
-      .round-label strong { color: var(--ink); }
-
-      .streak {
-        padding: 8px 12px;
-        border-radius: 999px;
-        background: #fff3e7;
-        color: #a35424;
-        font-size: .84rem;
-        font-weight: 900;
+      .mode-button {
+        padding: 9px 12px;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--muted);
+        font-size: .79rem;
       }
 
-      .progress-track {
-        height: 9px;
-        overflow: hidden;
-        border-radius: 99px;
-        background: #edf1e7;
-      }
+      .mode-button[aria-pressed="true"] { background: #eaf3e8; color: var(--green-dark); }
+      main { padding-block: 14px 58px; }
 
-      .progress-fill {
-        width: 0;
-        height: 100%;
-        border-radius: inherit;
-        background: linear-gradient(90deg, #80bd57, #b6d959);
-        transition: width .35s ease;
-      }
-
-      .question-area {
-        min-height: 185px;
+      .hero {
+        position: relative;
         display: grid;
-        align-content: center;
-        justify-items: center;
-        padding-block: 24px 19px;
-        text-align: center;
+        grid-template-columns: minmax(0, 1.45fr) minmax(250px, .8fr);
+        gap: 30px;
+        align-items: center;
+        min-height: 258px;
+        overflow: hidden;
+        padding: clamp(28px, 5vw, 52px);
+        border: 1px solid #e9eddf;
+        border-radius: 29px;
+        background: linear-gradient(115deg, #f1f8e8, #fffdf5 70%);
+        box-shadow: var(--shadow);
       }
 
-      .question-category {
-        margin-bottom: 10px;
+      .hero-copy { position: relative; z-index: 1; max-width: 610px; }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 13px;
         color: var(--green);
-        font-size: .74rem;
+        font-size: .73rem;
         font-weight: 900;
         letter-spacing: .13em;
         text-transform: uppercase;
       }
 
-      .question {
+      h1 {
+        max-width: 590px;
         margin: 0;
-        font-size: clamp(2.8rem, 9vw, 4.5rem);
+        font-size: clamp(2.3rem, 5vw, 3.8rem);
         font-weight: 900;
         letter-spacing: -.07em;
-        line-height: 1;
+        line-height: 1.02;
       }
 
-      .question-instruction {
-        margin: 11px 0 0;
-        color: var(--muted);
-        font-size: .95rem;
-      }
-
-      .answers {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 11px;
-      }
-
-      .answer {
-        min-height: 58px;
-        border: 2px solid var(--line);
-        border-radius: 15px;
-        background: #fff;
-        color: var(--ink);
-        cursor: pointer;
-        font-size: 1.13rem;
-        font-weight: 900;
-        transition: border-color .15s ease, background .15s ease, transform .15s ease;
-      }
-
-      .answer:not(:disabled):hover {
-        transform: translateY(-2px);
-        border-color: #a5cd81;
-        background: #f7faef;
-      }
-
-      .answer:focus-visible, .action-button:focus-visible {
-        outline: 3px solid #e9a568;
-        outline-offset: 3px;
-      }
-
-      .answer:disabled { cursor: default; }
-      .answer.correct { border-color: #6caf72; background: #edf8e9; color: #27613b; }
-      .answer.incorrect { border-color: #e49a76; background: #fff0e9; color: #984a2b; }
-
-      .feedback {
-        min-height: 31px;
+      .hero-copy p {
+        max-width: 510px;
         margin: 15px 0 0;
         color: var(--muted);
-        font-size: .93rem;
-        font-weight: 800;
-        text-align: center;
+        font-size: 1rem;
+        line-height: 1.65;
       }
 
-      .feedback.good { color: #26734f; }
-      .feedback.try-again { color: #a35424; }
-
-      .action-row {
-        display: flex;
-        justify-content: center;
-        padding-top: 2px;
-      }
-
-      .action-button {
-        min-height: 49px;
-        padding: 0 23px;
-        border: 0;
-        border-radius: 14px;
-        background: var(--green);
-        color: white;
-        cursor: pointer;
-        font-weight: 900;
-        transition: background .15s ease, transform .15s ease;
-      }
-
-      .action-button:hover { transform: translateY(-1px); background: var(--green-dark); }
-
-      .side-card {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        gap: 22px;
-        padding: 25px 21px;
-      }
-
-      .guide {
+      .hero-art {
+        position: relative;
         display: grid;
-        min-height: 156px;
+        min-height: 170px;
         place-items: center;
-        border-radius: 19px;
-        background: #f1f6e5;
-        font-size: 5rem;
       }
 
-      .side-card h2 {
-        margin: 19px 0 7px;
-        font-size: 1.17rem;
-        letter-spacing: -.035em;
+      .orbit {
+        position: absolute;
+        width: 190px;
+        height: 150px;
+        border: 1px dashed #c7d9bc;
+        border-radius: 50%;
+        transform: rotate(-18deg);
       }
 
-      .side-card p {
-        margin: 0;
-        color: var(--muted);
-        font-size: .9rem;
-        line-height: 1.55;
-      }
-
-      .score-box {
-        padding: 15px;
-        border-radius: 16px;
-        background: #f7f8f2;
-      }
-
-      .score-caption {
-        color: var(--muted);
-        font-size: .75rem;
+      .coin-stack {
+        position: relative;
+        display: grid;
+        width: 114px;
+        height: 114px;
+        place-items: center;
+        border: 9px solid #f8dfa0;
+        border-radius: 50%;
+        background: #ffd878;
+        box-shadow: 0 12px 0 #eec263, 0 19px 25px rgb(76 87 48 / 15%);
+        color: #755019;
+        font-size: 3.8rem;
         font-weight: 900;
-        letter-spacing: .1em;
+        transform: rotate(-9deg);
+      }
+
+      .float-chip {
+        position: absolute;
+        display: grid;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border: 1px solid #e9eddf;
+        border-radius: 15px;
+        background: var(--paper);
+        box-shadow: 0 8px 18px rgb(32 57 44 / 9%);
+        font-size: 1.35rem;
+      }
+
+      .chip-one { top: 19px; left: 15%; transform: rotate(-11deg); }
+      .chip-two { right: 9%; bottom: 17px; transform: rotate(10deg); }
+      .chip-three { top: 9px; right: 14%; transform: rotate(8deg); }
+
+      .section-nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin: 28px 0 19px;
+      }
+
+      .tabs { display: inline-flex; gap: 5px; }
+      .tab-button {
+        padding: 13px 18px;
+        border-radius: 13px;
+        background: transparent;
+        color: var(--muted);
+        font-size: .94rem;
+      }
+
+      .tab-button[aria-selected="true"] {
+        background: var(--green);
+        color: #fff;
+        box-shadow: 0 6px 16px rgb(23 107 80 / 18%);
+      }
+
+      .mode-caption { color: var(--muted); font-size: .84rem; font-weight: 700; }
+      .panel[hidden], .game-screen[hidden] { display: none; }
+
+      .game-picker {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 13px;
+        margin-bottom: 16px;
+      }
+
+      .game-choice {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 78px;
+        padding: 14px 17px;
+        border: 1px solid var(--line);
+        border-radius: 17px;
+        background: var(--paper);
+        text-align: left;
+        transition: border-color .15s ease, transform .15s ease, background .15s ease;
+      }
+
+      .game-choice:hover { transform: translateY(-2px); border-color: #aac8a6; }
+      .game-choice[aria-pressed="true"] { border-color: #83b89a; background: #f0f7ed; }
+      .choice-icon {
+        display: grid;
+        flex: 0 0 46px;
+        width: 46px;
+        height: 46px;
+        place-items: center;
+        border-radius: 15px;
+        background: #fff1d8;
+        font-size: 1.5rem;
+      }
+
+      .game-choice:nth-child(2) .choice-icon { background: #e8f2e6; }
+      .choice-title { display: block; font-size: .94rem; }
+      .choice-description { display: block; margin-top: 4px; color: var(--muted); font-size: .78rem; font-weight: 600; }
+
+      .sim-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 285px;
+        gap: 16px;
+        align-items: stretch;
+      }
+
+      .game-card, .side-card, .quiz-card, .quiz-side {
+        border: 1px solid rgb(229 233 224 / 90%);
+        border-radius: 22px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .game-card { min-width: 0; padding: clamp(20px, 3.5vw, 32px); }
+      .card-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+      .card-heading h2, .quiz-heading h2 { margin: 0; font-size: 1.45rem; letter-spacing: -.05em; }
+      .card-heading p, .quiz-heading p { margin: 7px 0 0; color: var(--muted); font-size: .91rem; line-height: 1.55; }
+      .level-tag {
+        flex: 0 0 auto;
+        padding: 7px 10px;
+        border-radius: 99px;
+        background: #f3f3e9;
+        color: #747847;
+        font-size: .69rem;
+        font-weight: 900;
+        letter-spacing: .08em;
         text-transform: uppercase;
       }
 
-      .score-value {
-        margin-top: 3px;
-        font-size: 2rem;
+      .scenario-banner {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0 20px;
+        padding: 14px 16px;
+        border: 1px solid #f0e7c8;
+        border-radius: 15px;
+        background: #fffbec;
+      }
+
+      .scenario-icon { font-size: 1.45rem; }
+      .scenario-banner strong { display: block; font-size: .88rem; }
+      .scenario-banner span:last-child { display: block; margin-top: 3px; color: var(--muted); font-size: .8rem; line-height: 1.4; }
+      .budget-list { display: grid; gap: 15px; }
+      .budget-row { display: grid; grid-template-columns: minmax(118px, .8fr) 1.7fr; gap: 14px; align-items: start; }
+      .budget-label { padding-top: 7px; }
+      .budget-label strong { display: block; font-size: .86rem; }
+      .budget-label span { display: block; margin-top: 4px; color: var(--muted); font-size: .74rem; }
+      .budget-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+
+      .budget-option {
+        min-height: 63px;
+        padding: 9px 7px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        cursor: pointer;
+        text-align: center;
+        transition: border-color .15s ease, background .15s ease;
+      }
+
+      .budget-option:hover { border-color: #a8c6a4; }
+      .budget-option[aria-pressed="true"] { border-color: var(--green); background: #edf6eb; box-shadow: inset 0 0 0 1px var(--green); }
+      .budget-option strong { display: block; color: var(--ink); font-size: .91rem; }
+      .budget-option span { display: block; margin-top: 4px; color: var(--muted); font-size: .68rem; line-height: 1.2; }
+      .budget-bottom { margin-top: 24px; padding-top: 19px; border-top: 1px solid var(--line); }
+      .budget-totals { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+      .total-box { padding: 12px 13px; border-radius: 13px; background: #f7f8f3; }
+      .total-box span { display: block; color: var(--muted); font-size: .7rem; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; }
+      .total-box strong { display: block; margin-top: 5px; font-size: 1.15rem; letter-spacing: -.035em; }
+      .total-box.highlight { background: #eaf4e8; }
+      .total-box.negative { background: #fff0e9; }
+      .budget-progress { height: 7px; margin-top: 13px; overflow: hidden; border-radius: 99px; background: #edf0e8; }
+      .budget-progress-fill { width: 0; height: 100%; border-radius: inherit; background: #70b57a; transition: width .2s ease, background .2s ease; }
+      .action-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 16px; }
+      .primary-button, .secondary-button {
+        min-height: 45px;
+        padding: 0 17px;
+        border: 0;
+        border-radius: 12px;
+        cursor: pointer;
+        font-size: .86rem;
         font-weight: 900;
-        letter-spacing: -.06em;
+        transition: transform .15s ease, background .15s ease;
       }
 
-      .result {
-        display: none;
-        padding-block: 12px 5px;
-        text-align: center;
+      .primary-button { background: var(--green); color: white; }
+      .primary-button:hover:not(:disabled) { transform: translateY(-1px); background: var(--green-dark); }
+      .primary-button:disabled { cursor: not-allowed; opacity: .48; }
+      .secondary-button { border: 1px solid var(--line); background: white; color: var(--ink); }
+      .secondary-button:hover { background: #f6f8f2; }
+      .inline-hint { color: var(--muted); font-size: .76rem; }
+      .result-message { min-height: 24px; margin: 12px 0 0; color: var(--muted); font-size: .85rem; font-weight: 700; line-height: 1.5; }
+      .result-message.success { color: var(--green); }
+      .result-message.warning { color: #a35424; }
+
+      .side-card { display: flex; flex-direction: column; gap: 17px; padding: 22px; }
+      .mentor-portrait {
+        display: grid;
+        min-height: 130px;
+        place-items: center;
+        border-radius: 18px;
+        background: linear-gradient(145deg, #f4f4df, #e4f1e4);
+        font-size: 4.5rem;
       }
 
-      .result.visible { display: block; }
-      .result-icon { font-size: 3.4rem; }
-      .result h2 { margin: 8px 0; font-size: 1.8rem; letter-spacing: -.05em; }
-      .result p { margin: 0 0 18px; color: var(--muted); line-height: 1.6; }
+      .side-card h3 { margin: 0; font-size: 1.05rem; letter-spacing: -.03em; }
+      .side-card > p { margin: -9px 0 0; color: var(--muted); font-size: .83rem; line-height: 1.55; }
+      .tip-box { padding: 14px; border-radius: 15px; background: #f7f8f3; }
+      .tip-box strong { display: block; margin-bottom: 5px; color: var(--green); font-size: .73rem; letter-spacing: .08em; text-transform: uppercase; }
+      .tip-box p { margin: 0; color: var(--muted); font-size: .81rem; line-height: 1.5; }
+      .metric-row { display: flex; justify-content: space-between; gap: 12px; padding-top: 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: .77rem; }
+      .metric-row strong { color: var(--ink); }
 
-      .answers.hidden, .question-area.hidden, .progress-area.hidden,
-      .game-header.hidden, .feedback.hidden, .action-row.hidden { display: none; }
-
-      .footer-note {
+      .rain-meter {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 5px 12px;
+        align-items: center;
         margin-top: 22px;
-        color: var(--muted);
-        font-size: .8rem;
-        text-align: center;
+        padding: 16px;
+        border: 1px solid #e9eddf;
+        border-radius: 15px;
+        background: #f9faf5;
       }
 
-      @media (max-width: 700px) {
-        .page { width: min(100% - 26px, 540px); }
-        .topbar { padding-block: 17px; }
-        .top-note { font-size: .78rem; }
-        main { padding-top: 17px; }
-        .intro { margin-bottom: 21px; }
-        .intro p { font-size: .95rem; }
-        .game-layout { grid-template-columns: 1fr; }
-        .game-card { padding: 22px 18px; }
-        .side-card { display: grid; grid-template-columns: 84px 1fr; gap: 13px; align-items: center; padding: 15px; }
-        .guide { min-height: 84px; font-size: 3rem; }
-        .side-card h2 { margin: 0 0 4px; }
-        .score-box { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; }
-        .score-value { margin: 0; }
+      .rain-meter span { color: var(--muted); font-size: .77rem; font-weight: 800; }
+      .rain-meter strong { font-size: 1.22rem; }
+      .rain-progress { grid-column: 1 / -1; height: 8px; margin-top: 5px; overflow: hidden; border-radius: 99px; background: #e8eee2; }
+      .rain-progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #7abd78, #c0df7a); transition: width .3s ease; }
+      .rain-event { margin-top: 18px; padding: 17px; border: 1px solid var(--line); border-radius: 15px; }
+      .rain-event-label { color: var(--green); font-size: .71rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+      .rain-event h3 { margin: 8px 0 5px; font-size: 1.12rem; }
+      .rain-event p { margin: 0; color: var(--muted); font-size: .84rem; line-height: 1.5; }
+      .rain-options { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 9px; margin-top: 15px; }
+      .rain-option { min-height: 72px; padding: 10px 6px; border: 1px solid var(--line); border-radius: 13px; background: white; cursor: pointer; }
+      .rain-option:hover { border-color: #a8c6a4; }
+      .rain-option[aria-pressed="true"] { border-color: var(--green); background: #edf6eb; box-shadow: inset 0 0 0 1px var(--green); }
+      .rain-option strong { display: block; font-size: .95rem; }
+      .rain-option span { display: block; margin-top: 5px; color: var(--muted); font-size: .68rem; line-height: 1.25; }
+
+      .quiz-layout { display: grid; grid-template-columns: minmax(0, 1fr) 285px; gap: 16px; align-items: stretch; }
+      .quiz-card { min-height: 485px; padding: clamp(20px, 3.5vw, 32px); }
+      .quiz-toolbar { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+      .quiz-heading h2 { font-size: 1.4rem; }
+      .topic-select-label { display: block; margin-bottom: 5px; color: var(--muted); font-size: .7rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
+      .topic-select {
+        min-height: 42px;
+        padding: 0 35px 0 12px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: white;
+        color: var(--ink);
+        font-size: .82rem;
+        font-weight: 800;
+      }
+
+      .quiz-progress-area { margin-top: 19px; }
+      .quiz-progress-label { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; color: var(--muted); font-size: .75rem; font-weight: 800; }
+      .quiz-progress-track { height: 7px; overflow: hidden; border-radius: 99px; background: #edf0e8; }
+      .quiz-progress-fill { width: 0; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #6caf72, #bcda71); transition: width .25s ease; }
+      .quiz-question-area { min-height: 132px; padding: 25px 0 17px; }
+      .quiz-topic-tag { color: var(--green); font-size: .69rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+      .quiz-question { margin: 10px 0 0; font-size: clamp(1.25rem, 2.5vw, 1.7rem); font-weight: 900; letter-spacing: -.04em; line-height: 1.27; }
+      .quiz-options { display: grid; gap: 9px; }
+      .quiz-answer {
+        display: grid;
+        grid-template-columns: 31px 1fr;
+        gap: 11px;
+        align-items: center;
+        min-height: 52px;
+        padding: 9px 13px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: white;
+        cursor: pointer;
+        text-align: left;
+        font-size: .88rem;
+        font-weight: 700;
+      }
+
+      .quiz-answer:hover:not(:disabled) { border-color: #a8c6a4; background: #fbfcf8; }
+      .quiz-answer:disabled { cursor: default; }
+      .answer-letter { display: grid; width: 29px; height: 29px; place-items: center; border-radius: 9px; background: #f2f4ed; color: var(--muted); font-size: .73rem; font-weight: 900; }
+      .quiz-answer.correct { border-color: #78b57e; background: #eff8ec; color: #27613b; }
+      .quiz-answer.incorrect { border-color: #e49a76; background: #fff1ea; color: #984a2b; }
+      .quiz-answer.correct .answer-letter { background: #dcefd9; color: #27613b; }
+      .quiz-feedback { min-height: 44px; margin: 12px 0 0; color: var(--muted); font-size: .81rem; line-height: 1.5; }
+      .quiz-feedback.good { color: var(--green); }
+      .quiz-feedback.try-again { color: #a35424; }
+      .quiz-actions { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+      .quiz-score-pill { color: var(--muted); font-size: .78rem; font-weight: 800; }
+      .quiz-result { display: none; padding: 55px 12px; text-align: center; }
+      .quiz-result.visible { display: block; }
+      .quiz-result-icon { font-size: 3.2rem; }
+      .quiz-result h3 { margin: 8px 0; font-size: 1.8rem; letter-spacing: -.05em; }
+      .quiz-result p { max-width: 400px; margin: 0 auto 19px; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+      .quiz-side { display: flex; flex-direction: column; gap: 16px; padding: 22px; }
+      .quiz-side-top { display: flex; align-items: center; gap: 12px; }
+      .quiz-side-icon { display: grid; flex: 0 0 52px; width: 52px; height: 52px; place-items: center; border-radius: 16px; background: #eaf3e7; font-size: 1.8rem; }
+      .quiz-side h3 { margin: 0; font-size: 1.03rem; }
+      .quiz-side p { margin: 4px 0 0; color: var(--muted); font-size: .79rem; line-height: 1.45; }
+      .score-stat { margin-top: 3px; padding: 15px; border-radius: 15px; background: #f7f8f3; }
+      .score-stat span { display: block; color: var(--muted); font-size: .7rem; font-weight: 900; letter-spacing: .07em; text-transform: uppercase; }
+      .score-stat strong { display: block; margin-top: 4px; font-size: 1.75rem; letter-spacing: -.05em; }
+      .class-callout { margin-top: auto; padding: 14px; border-radius: 14px; background: #fffaeb; color: #75613b; font-size: .78rem; line-height: 1.5; }
+      .class-callout strong { display: block; margin-bottom: 4px; }
+      .footer-note { margin-top: 19px; color: var(--muted); font-size: .76rem; text-align: center; }
+
+      @media (max-width: 800px) {
+        .hero { grid-template-columns: minmax(0, 1fr) 200px; gap: 12px; }
+        .sim-layout, .quiz-layout { grid-template-columns: minmax(0, 1fr) 245px; gap: 12px; }
+        .side-card, .quiz-side { padding: 17px; }
+        .budget-row { grid-template-columns: 108px minmax(0, 1fr); gap: 9px; }
+      }
+
+      @media (max-width: 680px) {
+        .page { width: min(100% - 26px, 560px); }
+        .topbar { min-height: 72px; }
+        .class-note { display: none; }
+        .topbar-right { gap: 0; }
+        .hero { grid-template-columns: minmax(0, 1fr); min-height: auto; padding: 28px 24px; }
+        .hero-art { position: absolute; right: -26px; bottom: -16px; width: 160px; min-height: 145px; opacity: .52; }
+        .hero-copy { max-width: 440px; }
+        .hero-copy p { max-width: 370px; }
+        .section-nav { align-items: flex-start; flex-direction: column; gap: 7px; margin-top: 20px; }
+        .game-picker { gap: 9px; }
+        .game-choice { min-height: 72px; padding: 10px; gap: 9px; }
+        .choice-icon { flex-basis: 38px; width: 38px; height: 38px; border-radius: 12px; font-size: 1.2rem; }
+        .choice-title { font-size: .82rem; }
+        .choice-description { font-size: .7rem; }
+        .sim-layout, .quiz-layout { grid-template-columns: minmax(0, 1fr); }
+        .side-card { display: grid; grid-template-columns: 72px 1fr; gap: 10px 13px; align-items: center; }
+        .mentor-portrait { grid-row: span 2; min-height: 72px; font-size: 2.7rem; }
+        .side-card > p { margin: -7px 0 0; }
+        .side-card .tip-box, .side-card .metric-row { grid-column: 1 / -1; }
+        .quiz-side { display: grid; grid-template-columns: 1fr 1fr; align-items: center; }
+        .quiz-side-top, .class-callout { grid-column: 1 / -1; }
+        .class-callout { margin-top: 0; }
+      }
+
+      @media (max-width: 470px) {
+        .page { width: min(100% - 20px, 560px); }
+        .brand { gap: 8px; font-size: 1rem; }
+        .brand-mark { width: 35px; height: 35px; border-radius: 12px; }
+        .mode-button { padding: 8px 9px; font-size: .72rem; }
+        .hero { border-radius: 22px; }
+        h1 { font-size: 2.35rem; }
+        .hero-copy p { max-width: 300px; font-size: .91rem; }
+        .game-picker { grid-template-columns: 1fr; }
+        .game-choice { min-height: 63px; }
+        .budget-row { grid-template-columns: 1fr; gap: 6px; }
+        .budget-label { padding-top: 0; }
+        .budget-options { gap: 6px; }
+        .budget-option { min-height: 59px; }
+        .budget-totals { gap: 6px; }
+        .total-box { padding: 10px 8px; }
+        .total-box span { font-size: .61rem; }
+        .total-box strong { font-size: 1rem; }
+        .quiz-toolbar { align-items: flex-start; flex-direction: column; }
+        .quiz-question-area { min-height: 120px; }
+        .rain-options { gap: 6px; }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -360,255 +533,650 @@
   <body>
     <div class="page">
       <header class="topbar">
-        <a class="brand" href="#" aria-label="Number Rangers home">
-          <span class="brand-mark" aria-hidden="true">🌱</span>
-          <span>Number Rangers</span>
+        <a class="brand" href="#" aria-label="Money Mentors home">
+          <span class="brand-mark" aria-hidden="true">$</span>
+          <span>money mentors</span>
         </a>
-        <span class="top-note">A little practice goes a long way ✨</span>
+        <div class="topbar-right">
+          <span class="class-note">Financial literacy, made real</span>
+          <div class="mode-switch" role="group" aria-label="Choose how to use Money Mentors">
+            <button class="mode-button" id="solo-mode" type="button" aria-pressed="true">Solo</button>
+            <button class="mode-button" id="class-mode" type="button" aria-pressed="false">In class</button>
+          </div>
+        </div>
       </header>
 
       <main>
-        <section class="intro" aria-labelledby="page-title">
-          <span class="eyebrow">Your next math adventure</span>
-          <h1 id="page-title">Ready, Ranger?</h1>
-          <p>Solve the number puzzles, build your streak, and help your forest friends grow.</p>
+        <section class="hero" aria-labelledby="page-title">
+          <div class="hero-copy">
+            <span class="eyebrow">✦ Your money, your moves</span>
+            <h1 id="page-title">Practice for real life.</h1>
+            <p>Make money choices, see what happens, and build confidence one small decision at a time.</p>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="orbit"></div>
+            <span class="float-chip chip-one">🌱</span>
+            <span class="float-chip chip-two">✨</span>
+            <span class="float-chip chip-three">🪙</span>
+            <div class="coin-stack">$</div>
+          </div>
         </section>
 
-        <section class="game-layout" aria-label="Math Quest game">
-          <div class="game-card">
-            <div class="game-header" id="game-header">
-              <span class="round-label">Question <strong id="round-number">1</strong> of <strong id="round-total">3</strong></span>
-              <span class="streak" aria-live="polite">🔥 <span id="streak">0</span> streak</span>
-            </div>
-            <div class="progress-area" id="progress-area">
-              <div
-                class="progress-track"
-                role="progressbar"
-                aria-label="Quest progress"
-                aria-valuemin="0"
-                aria-valuemax="3"
-                aria-valuenow="0"
-                id="progress-track"
-              >
-                <div class="progress-fill" id="progress-fill"></div>
-              </div>
-            </div>
+        <div class="section-nav">
+          <nav class="tabs" role="tablist" aria-label="Money activities">
+            <button class="tab-button" id="games-tab" type="button" role="tab" aria-selected="true" aria-controls="games-panel">🎮 Money games</button>
+            <button class="tab-button" id="quiz-tab" type="button" role="tab" aria-selected="false" aria-controls="quiz-panel">⚡ Weekly quizzes</button>
+          </nav>
+          <span class="mode-caption" id="mode-caption">Just you — no timer, no pressure.</span>
+        </div>
 
-            <div class="question-area" id="question-area" aria-live="polite">
-              <span class="question-category" id="question-category">Quick sums</span>
-              <p class="question" id="question">7 + 5</p>
-              <p class="question-instruction">Pick the right answer!</p>
-            </div>
-
-            <div class="answers" id="answers" aria-label="Answer choices"></div>
-            <p class="feedback" id="feedback" aria-live="polite"></p>
-            <div class="action-row hidden" id="action-row">
-              <button class="action-button" id="next-button" type="button">Next question →</button>
-            </div>
-
-            <div class="result" id="result" aria-live="polite">
-              <div class="result-icon" id="result-icon" aria-hidden="true">🌟</div>
-              <h2 id="result-title">Quest complete!</h2>
-              <p id="result-message"></p>
-              <button class="action-button" id="play-again-button" type="button">Play again ↻</button>
-            </div>
+        <section class="panel" id="games-panel" role="tabpanel" aria-labelledby="games-tab">
+          <div class="game-picker" role="group" aria-label="Choose a money simulation">
+            <button class="game-choice" type="button" data-game="budget" aria-pressed="true">
+              <span class="choice-icon" aria-hidden="true">🧾</span>
+              <span><span class="choice-title">First paycheck</span><span class="choice-description">Build a monthly budget</span></span>
+            </button>
+            <button class="game-choice" type="button" data-game="rainy" aria-pressed="false">
+              <span class="choice-icon" aria-hidden="true">🌧️</span>
+              <span><span class="choice-title">Rainy day fund</span><span class="choice-description">Prepare for surprises</span></span>
+            </button>
           </div>
 
-          <aside class="side-card" aria-label="Ranger guide and score">
-            <div class="guide" aria-hidden="true">🦊</div>
-            <div>
-              <h2>Your forest guide</h2>
-              <p>Take your time, trust your thinking, and keep going!</p>
-            </div>
-            <div class="score-box">
-              <div>
-                <div class="score-caption">Stars earned</div>
-                <div class="score-value" id="score">0</div>
+          <div class="sim-layout">
+            <section class="game-card game-screen" id="budget-screen" aria-labelledby="budget-title">
+              <div class="card-heading">
+                <div>
+                  <h2 id="budget-title">Your first paycheck</h2>
+                  <p>Make a plan for one month of take-home pay.</p>
+                </div>
+                <span class="level-tag">Real-life sim</span>
               </div>
-              <span aria-hidden="true">⭐</span>
-            </div>
-          </aside>
+              <div class="scenario-banner">
+                <span class="scenario-icon" aria-hidden="true">💼</span>
+                <span><strong>You take home $2,400 this month.</strong><span>Choose one option in each row. Can you cover your needs and save at least 10%?</span></span>
+              </div>
+              <div class="budget-list" id="budget-options">
+                <div class="budget-row" data-category="home">
+                  <div class="budget-label"><strong>🏠 Housing</strong><span>Where you live</span></div>
+                  <div class="budget-options" role="group" aria-label="Choose a housing option">
+                    <button class="budget-option" type="button" data-cost="550" data-name="Shared place"><strong>$550</strong><span>Shared place</span></button>
+                    <button class="budget-option" type="button" data-cost="850" data-name="Small studio"><strong>$850</strong><span>Small studio</span></button>
+                    <button class="budget-option" type="button" data-cost="1250" data-name="Own apartment"><strong>$1,250</strong><span>Own apartment</span></button>
+                  </div>
+                </div>
+                <div class="budget-row" data-category="transport">
+                  <div class="budget-label"><strong>🚌 Transport</strong><span>Getting around</span></div>
+                  <div class="budget-options" role="group" aria-label="Choose a transportation option">
+                    <button class="budget-option" type="button" data-cost="90" data-name="Bus pass"><strong>$90</strong><span>Bus pass</span></button>
+                    <button class="budget-option" type="button" data-cost="260" data-name="Used car"><strong>$260</strong><span>Used car</span></button>
+                    <button class="budget-option" type="button" data-cost="420" data-name="Car + fuel"><strong>$420</strong><span>Car + fuel</span></button>
+                  </div>
+                </div>
+                <div class="budget-row" data-category="food">
+                  <div class="budget-label"><strong>🥗 Food</strong><span>Meals this month</span></div>
+                  <div class="budget-options" role="group" aria-label="Choose a food budget">
+                    <button class="budget-option" type="button" data-cost="240" data-name="Mostly cooking"><strong>$240</strong><span>Mostly cooking</span></button>
+                    <button class="budget-option" type="button" data-cost="380" data-name="Mix it up"><strong>$380</strong><span>Mix it up</span></button>
+                    <button class="budget-option" type="button" data-cost="560" data-name="Meals out"><strong>$560</strong><span>Meals out</span></button>
+                  </div>
+                </div>
+                <div class="budget-row" data-category="fun">
+                  <div class="budget-label"><strong>🎟️ Fun</strong><span>Wants &amp; treats</span></div>
+                  <div class="budget-options" role="group" aria-label="Choose a fun budget">
+                    <button class="budget-option" type="button" data-cost="80" data-name="Free & low-cost"><strong>$80</strong><span>Free &amp; low-cost</span></button>
+                    <button class="budget-option" type="button" data-cost="180" data-name="A few outings"><strong>$180</strong><span>A few outings</span></button>
+                    <button class="budget-option" type="button" data-cost="350" data-name="Big social month"><strong>$350</strong><span>Big social month</span></button>
+                  </div>
+                </div>
+                <div class="budget-row" data-category="saving">
+                  <div class="budget-label"><strong>🌱 Savings</strong><span>Pay your future self</span></div>
+                  <div class="budget-options" role="group" aria-label="Choose a savings goal">
+                    <button class="budget-option" type="button" data-cost="100" data-name="Start small"><strong>$100</strong><span>Start small</span></button>
+                    <button class="budget-option" type="button" data-cost="240" data-name="10% goal"><strong>$240</strong><span>10% goal</span></button>
+                    <button class="budget-option" type="button" data-cost="400" data-name="Stretch goal"><strong>$400</strong><span>Stretch goal</span></button>
+                  </div>
+                </div>
+              </div>
+              <div class="budget-bottom">
+                <div class="budget-totals" aria-live="polite">
+                  <div class="total-box"><span>Take-home pay</span><strong>$2,400</strong></div>
+                  <div class="total-box"><span>Planned out</span><strong id="budget-spent">—</strong></div>
+                  <div class="total-box highlight" id="budget-left-box"><span>Left as a buffer</span><strong id="budget-left">—</strong></div>
+                </div>
+                <div class="budget-progress" role="progressbar" aria-label="Paycheck planned" aria-valuemin="0" aria-valuemax="2400" aria-valuenow="0" id="budget-track"><div class="budget-progress-fill" id="budget-fill"></div></div>
+                <div class="action-row">
+                  <button class="primary-button" id="budget-check" type="button" disabled>Check my plan →</button>
+                  <span class="inline-hint" id="budget-count">Choose 5 categories to make your plan.</span>
+                </div>
+                <p class="result-message" id="budget-result" aria-live="polite"></p>
+              </div>
+            </section>
+
+            <section class="game-card game-screen" id="rainy-screen" aria-labelledby="rainy-title" hidden>
+              <div class="card-heading">
+                <div>
+                  <h2 id="rainy-title">Grow your rainy day fund</h2>
+                  <p>Four months. A few surprises. One goal: be ready.</p>
+                </div>
+                <span class="level-tag">4-month challenge</span>
+              </div>
+              <div class="rain-meter">
+                <span>Emergency fund</span><strong id="rain-balance">$0</strong>
+                <div class="rain-progress" role="progressbar" aria-label="Emergency fund goal" aria-valuemin="0" aria-valuemax="1000" aria-valuenow="0" id="rain-track"><div class="rain-progress-fill" id="rain-fill"></div></div>
+                <span id="rain-debt-label">Goal: $1,000</span><span id="rain-debt">Month 1 of 4</span>
+              </div>
+              <div class="rain-event" id="rain-event">
+                <span class="rain-event-label" id="rain-month">MONTH 1</span>
+                <h3 id="rain-event-title">A fresh start</h3>
+                <p id="rain-event-description">You have $450 left after monthly bills. How much will you tuck away?</p>
+              </div>
+              <div class="rain-options" id="rain-options" role="group" aria-label="Choose how much to save this month"></div>
+              <div class="action-row">
+                <button class="primary-button" id="rain-confirm" type="button" disabled>Make this month's move →</button>
+                <button class="secondary-button" id="rain-reset" type="button">Start over</button>
+              </div>
+              <p class="result-message" id="rain-result" aria-live="polite"></p>
+            </section>
+
+            <aside class="side-card" aria-label="Money mentor tip">
+              <div class="mentor-portrait" aria-hidden="true">🦉</div>
+              <h3>A little mentor wisdom</h3>
+              <p>There isn't one perfect money plan. The best plan starts with what matters most to you.</p>
+              <div class="tip-box" id="game-tip">
+                <strong>Money move</strong>
+                <p>A budget is a plan for your money—not a rulebook. Give every dollar a job, including some dollars for you.</p>
+              </div>
+              <div class="metric-row"><span>Try it again</span><strong>Change your choices</strong></div>
+            </aside>
+          </div>
         </section>
-        <p class="footer-note">Three questions. No timer. Just you and your number skills.</p>
+
+        <section class="panel" id="quiz-panel" role="tabpanel" aria-labelledby="quiz-tab" hidden>
+          <div class="quiz-layout">
+            <section class="quiz-card" aria-label="Weekly money quiz">
+              <div class="quiz-toolbar">
+                <div class="quiz-heading">
+                  <h2>Quick money check-in</h2>
+                  <p>Five questions. Helpful explanations. Go at your own pace.</p>
+                </div>
+                <label>
+                  <span class="topic-select-label">This week's topic</span>
+                  <select class="topic-select" id="topic-select" aria-label="Choose a weekly quiz topic">
+                    <option value="budget">Budgeting basics</option>
+                    <option value="saving">Saving &amp; goals</option>
+                    <option value="needs">Needs vs. wants</option>
+                    <option value="credit">Credit basics</option>
+                  </select>
+                </label>
+              </div>
+              <div id="quiz-active">
+                <div class="quiz-progress-area">
+                  <div class="quiz-progress-label"><span>Question <strong id="quiz-number">1</strong> of 5</span><span id="quiz-points">0 points</span></div>
+                  <div class="quiz-progress-track" role="progressbar" aria-label="Quiz progress" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0" id="quiz-track"><div class="quiz-progress-fill" id="quiz-fill"></div></div>
+                </div>
+                <div class="quiz-question-area" aria-live="polite">
+                  <span class="quiz-topic-tag" id="quiz-topic-tag">Budgeting basics</span>
+                  <p class="quiz-question" id="quiz-question"></p>
+                </div>
+                <div class="quiz-options" id="quiz-options" role="group" aria-label="Answer choices"></div>
+                <p class="quiz-feedback" id="quiz-feedback" aria-live="polite"></p>
+                <div class="quiz-actions">
+                  <span class="quiz-score-pill" id="quiz-score-pill">0 correct so far</span>
+                  <button class="primary-button" id="quiz-next" type="button" disabled>Check answer</button>
+                </div>
+              </div>
+              <div class="quiz-result" id="quiz-result" aria-live="polite">
+                <div class="quiz-result-icon" id="quiz-result-icon" aria-hidden="true">🌟</div>
+                <h3 id="quiz-result-title">Nice work!</h3>
+                <p id="quiz-result-message"></p>
+                <button class="primary-button" id="quiz-again" type="button">Try this quiz again ↻</button>
+              </div>
+            </section>
+
+            <aside class="quiz-side" aria-label="Quiz details and score">
+              <div class="quiz-side-top">
+                <div class="quiz-side-icon" aria-hidden="true">🧠</div>
+                <div><h3 id="quiz-side-title">Little by little</h3><p id="quiz-side-description">Each question comes with a quick explanation.</p></div>
+              </div>
+              <div class="score-stat">
+                <span>Your score</span>
+                <strong id="quiz-score">0 / 5</strong>
+              </div>
+              <div class="score-stat">
+                <span>Streak</span>
+                <strong id="quiz-streak">0 🔥</strong>
+              </div>
+              <div class="class-callout" id="quiz-mode-note"><strong>💡 Try it together</strong>Put this on the big screen, read each question aloud, and invite everyone to vote before choosing.</div>
+            </aside>
+          </div>
+        </section>
+        <p class="footer-note">No logins, no grades—just a safe place to practice real-world money skills.</p>
       </main>
     </div>
 
     <script>
       (() => {
-        const totalQuestions = 3;
-        const elements = {
-          actionRow: document.querySelector("#action-row"),
-          answers: document.querySelector("#answers"),
-          feedback: document.querySelector("#feedback"),
-          gameHeader: document.querySelector("#game-header"),
-          nextButton: document.querySelector("#next-button"),
-          progressArea: document.querySelector("#progress-area"),
-          progressFill: document.querySelector("#progress-fill"),
-          progressTrack: document.querySelector("#progress-track"),
-          question: document.querySelector("#question"),
-          questionArea: document.querySelector("#question-area"),
-          questionCategory: document.querySelector("#question-category"),
-          result: document.querySelector("#result"),
-          resultIcon: document.querySelector("#result-icon"),
-          resultMessage: document.querySelector("#result-message"),
-          resultTitle: document.querySelector("#result-title"),
-          roundNumber: document.querySelector("#round-number"),
-          roundTotal: document.querySelector("#round-total"),
-          score: document.querySelector("#score"),
-          streak: document.querySelector("#streak"),
-          playAgainButton: document.querySelector("#play-again-button"),
+        const paycheck = 2400;
+        const savingTarget = paycheck * 0.1;
+        const rainGoal = 1000;
+        const rainMonths = [
+          { title: "A fresh start", description: "You have $450 left after monthly bills. How much will you tuck away?", surprise: 0 },
+          { title: "Your bike needs a repair", description: "A repair costs $360. If your fund can't cover it all, the rest becomes a small loan.", surprise: 360 },
+          { title: "Back on track", description: "This month is calm. You still have $450 left after bills—keep building your cushion.", surprise: 0 },
+          { title: "A surprise phone replacement", description: "Your phone stops working. A basic replacement costs $180.", surprise: 180 },
+        ];
+        const quizTopics = {
+          budget: {
+            label: "Budgeting basics",
+            questions: [
+              { question: "What is a budget mainly for?", options: ["To plan where your money goes", "To make every month exactly the same", "To avoid spending any money", "To borrow more money"], answer: 0, explanation: "A budget is a plan that helps you make intentional choices with the money you have." },
+              { question: "Your take-home pay is $1,800. Bills and savings total $1,500. How much is left?", options: ["$200", "$300", "$500", "$3,300"], answer: 1, explanation: "$1,800 − $1,500 = $300 left. Subtract your planned costs from your income." },
+              { question: "Which is usually a fixed monthly expense?", options: ["A concert ticket", "A surprise gift", "Rent", "A snack after school"], answer: 2, explanation: "Rent is usually due regularly for the same amount, so it is a fixed expense." },
+              { question: "What is one helpful first step when making a budget?", options: ["Guess what you earn", "List your income and expenses", "Spend first and check later", "Ignore small purchases"], answer: 1, explanation: "Start with the money coming in and going out so your plan is based on real numbers." },
+              { question: "You spent more on food than planned. What could you do next month?", options: ["Give up on budgeting", "Adjust your plan to fit what you learned", "Pretend the expense did not happen", "Borrow to cover every difference"], answer: 1, explanation: "A budget can change. Use what you learned to make next month's plan more realistic." },
+            ],
+          },
+          saving: {
+            label: "Saving & goals",
+            questions: [
+              { question: "What can make a savings goal easier to reach?", options: ["Give it a clear amount and deadline", "Wait until you have lots left over", "Keep changing the goal every week", "Avoid checking your progress"], answer: 0, explanation: "A specific amount and a target date make it easier to plan and track your progress." },
+              { question: "You save $25 each week for 8 weeks. How much do you save?", options: ["$100", "$175", "$200", "$250"], answer: 2, explanation: "$25 × 8 weeks = $200. Small, regular deposits add up." },
+              { question: "What is an emergency fund for?", options: ["A planned vacation", "Unexpected costs, like a repair", "Everyday snacks", "A shopping spree"], answer: 1, explanation: "An emergency fund is money set aside for unexpected expenses or changes in income." },
+              { question: "You have a $300 goal and already saved $180. How much more do you need?", options: ["$80", "$120", "$180", "$480"], answer: 1, explanation: "$300 − $180 = $120 left to reach your goal." },
+              { question: "Why might someone save before spending on wants?", options: ["To make progress on an important goal", "Because wants are always bad", "So they never have to budget", "To avoid paying regular bills"], answer: 0, explanation: "Saving first can help you make steady progress before the rest of your money gets spent." },
+            ],
+          },
+          needs: {
+            label: "Needs vs. wants",
+            questions: [
+              { question: "Which is most likely a need?", options: ["A safe place to live", "The newest game console", "A concert upgrade", "A designer backpack"], answer: 0, explanation: "Safe housing is a basic need. A need is something important for health, safety, or daily life." },
+              { question: "Why can the same item be a need for one person and a want for another?", options: ["People have different situations and priorities", "Needs never change", "Wants cost more than needs", "Prices decide what is a need"], answer: 0, explanation: "Your circumstances matter. For example, transportation may be essential in one place and optional in another." },
+              { question: "You need shoes for school and want a premium brand. What is a useful choice?", options: ["Compare comfortable options within your budget", "Buy the most expensive pair", "Skip shoes to save money", "Put every option on credit"], answer: 0, explanation: "Meet the need first, then decide whether a pricier want fits your plan." },
+              { question: "What is a want?", options: ["Something that makes life more enjoyable but is not essential", "Any bill that arrives monthly", "Something everyone must buy", "Money you have already saved"], answer: 0, explanation: "Wants can be meaningful and fun; deciding how much to spend on them is part of planning." },
+              { question: "Your budget is tight this week. What might help you decide what to spend on?", options: ["Rank needs first, then choose a want if money allows", "Buy everything right away", "Ignore your available money", "Assume every want is a need"], answer: 0, explanation: "Covering important needs first gives you a clearer picture of what is available for wants." },
+            ],
+          },
+          credit: {
+            label: "Credit basics",
+            questions: [
+              { question: "What does borrowing money on a credit card usually mean?", options: ["You may need to repay it, often with interest", "The money is a gift", "Your bill disappears each month", "You never need to check a statement"], answer: 0, explanation: "Credit is borrowed money. If you carry a balance, interest may add to what you owe." },
+              { question: "What is an interest charge?", options: ["A cost for borrowing money", "A reward for paying late", "A type of paycheck", "A savings goal"], answer: 0, explanation: "Interest is the cost of borrowing, typically calculated as a percentage of the balance." },
+              { question: "What is one good habit when using credit?", options: ["Read statements and pay on time", "Ignore due dates", "Borrow the maximum every month", "Share your account password"], answer: 0, explanation: "Checking statements and making payments on time can help you stay informed and avoid late fees." },
+              { question: "If you borrow $100 and owe $110 later, what is the extra $10?", options: ["Interest or fees", "A savings match", "Your original balance", "A paycheck deduction"], answer: 0, explanation: "The additional amount may come from interest or fees. Check the terms to know the total cost." },
+              { question: "Before taking a loan, what should you check?", options: ["The total amount to repay and the due dates", "Only the color of the card", "How quickly you can borrow more", "Whether the payment can be forgotten"], answer: 0, explanation: "Know the total cost, interest, fees, and payment schedule before agreeing to borrow." },
+            ],
+          },
         };
+        const elements = {
+          budgetCheck: document.querySelector("#budget-check"),
+          budgetCount: document.querySelector("#budget-count"),
+          budgetFill: document.querySelector("#budget-fill"),
+          budgetLeft: document.querySelector("#budget-left"),
+          budgetLeftBox: document.querySelector("#budget-left-box"),
+          budgetResult: document.querySelector("#budget-result"),
+          budgetSpent: document.querySelector("#budget-spent"),
+          budgetTrack: document.querySelector("#budget-track"),
+          classMode: document.querySelector("#class-mode"),
+          gameTip: document.querySelector("#game-tip p"),
+          modeCaption: document.querySelector("#mode-caption"),
+          quizAgain: document.querySelector("#quiz-again"),
+          quizFeedback: document.querySelector("#quiz-feedback"),
+          quizFill: document.querySelector("#quiz-fill"),
+          quizNext: document.querySelector("#quiz-next"),
+          quizNumber: document.querySelector("#quiz-number"),
+          quizOptions: document.querySelector("#quiz-options"),
+          quizPoints: document.querySelector("#quiz-points"),
+          quizQuestion: document.querySelector("#quiz-question"),
+          quizResult: document.querySelector("#quiz-result"),
+          quizScore: document.querySelector("#quiz-score"),
+          quizScorePill: document.querySelector("#quiz-score-pill"),
+          quizSideDescription: document.querySelector("#quiz-side-description"),
+          quizSideTitle: document.querySelector("#quiz-side-title"),
+          quizStreak: document.querySelector("#quiz-streak"),
+          quizTopicTag: document.querySelector("#quiz-topic-tag"),
+          quizTrack: document.querySelector("#quiz-track"),
+          rainBalance: document.querySelector("#rain-balance"),
+          rainConfirm: document.querySelector("#rain-confirm"),
+          rainDebt: document.querySelector("#rain-debt"),
+          rainFill: document.querySelector("#rain-fill"),
+          rainMonth: document.querySelector("#rain-month"),
+          rainOptions: document.querySelector("#rain-options"),
+          rainResult: document.querySelector("#rain-result"),
+          rainTrack: document.querySelector("#rain-track"),
+          soloMode: document.querySelector("#solo-mode"),
+          topicSelect: document.querySelector("#topic-select"),
+        };
+        let isClassMode = false;
+        let budgetChecked = false;
+        let quizTopic = elements.topicSelect.value;
+        let quizIndex = 0;
+        let quizScore = 0;
+        let quizStreak = 0;
+        let quizAnswered = false;
+        let rainMonthIndex = 0;
+        let rainBalance = 0;
+        let rainDebt = 0;
+        let rainContribution = null;
 
-        let questionNumber = 0;
-        let score = 0;
-        let streak = 0;
-        let correctAnswer = 0;
-        let answered = false;
+        const formatMoney = (amount) => `$${amount.toLocaleString("en-US")}`;
+        const chosenBudgetOptions = () => [...document.querySelectorAll(".budget-row")].map((row) => row.querySelector('[aria-pressed="true"]')).filter(Boolean);
 
-        const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+        function updateMode() {
+          elements.soloMode.setAttribute("aria-pressed", String(!isClassMode));
+          elements.classMode.setAttribute("aria-pressed", String(isClassMode));
+          elements.modeCaption.textContent = isClassMode
+            ? "Project it, talk it through, and decide together."
+            : "Just you — no timer, no pressure.";
+          document.querySelector("#quiz-mode-note").innerHTML = isClassMode
+            ? "<strong>🗣️ Make it a group huddle</strong>Read each question aloud, invite everyone to vote, then choose an answer and discuss the explanation."
+            : "<strong>💡 Your own pace</strong>Take a moment to think before you choose. Every answer includes a quick explanation.";
+        }
 
-        function makeQuestion() {
-          const operations = ["+", "−", "×"];
-          const operation = operations[randomInt(0, operations.length - 1)];
-          let first;
-          let second;
-          let answer;
+        function updateBudget() {
+          const choices = chosenBudgetOptions();
+          const total = choices.reduce((sum, button) => sum + Number(button.dataset.cost), 0);
+          const left = paycheck - total;
+          const count = choices.length;
+          elements.budgetSpent.textContent = count ? formatMoney(total) : "—";
+          elements.budgetLeft.textContent = count ? formatMoney(left) : "—";
+          elements.budgetLeftBox.classList.toggle("negative", left < 0);
+          elements.budgetLeftBox.classList.toggle("highlight", left >= 0);
+          elements.budgetFill.style.width = `${Math.min(100, Math.max(0, (total / paycheck) * 100))}%`;
+          elements.budgetFill.style.background = left < 0 ? "#df8b64" : "";
+          elements.budgetTrack.setAttribute("aria-valuenow", String(Math.min(paycheck, Math.max(0, total))));
+          elements.budgetCount.textContent = count === 5
+            ? "Ready to see how your plan holds up."
+            : `Choose ${5 - count} more categor${5 - count === 1 ? "y" : "ies"} to finish your plan.`;
+          elements.budgetCheck.disabled = count !== 5;
+          if (!budgetChecked) {
+            elements.budgetResult.textContent = "";
+            elements.budgetResult.className = "result-message";
+          }
+        }
 
-          if (operation === "+") {
-            first = randomInt(2, 30);
-            second = randomInt(2, 20);
-            answer = first + second;
-          } else if (operation === "−") {
-            first = randomInt(5, 40);
-            second = randomInt(1, first);
-            answer = first - second;
+        function checkBudget() {
+          if (chosenBudgetOptions().length !== 5) return;
+          budgetChecked = true;
+          const choices = chosenBudgetOptions();
+          const total = choices.reduce((sum, button) => sum + Number(button.dataset.cost), 0);
+          const savings = Number(document.querySelector('.budget-row[data-category="saving"] [aria-pressed="true"]').dataset.cost);
+          const left = paycheck - total;
+          if (left < 0) {
+            elements.budgetResult.textContent = `You're ${formatMoney(Math.abs(left))} over your paycheck. Try a less expensive option or adjust your savings goal until the plan balances.`;
+            elements.budgetResult.className = "result-message warning";
+          } else if (savings < savingTarget) {
+            elements.budgetResult.textContent = `Your plan has ${formatMoney(left)} left, but savings are below the 10% goal. See if you can set aside at least ${formatMoney(savingTarget)}.`;
+            elements.budgetResult.className = "result-message warning";
           } else {
-            first = randomInt(2, 12);
-            second = randomInt(2, 10);
-            answer = first * second;
+            elements.budgetResult.textContent = `Balanced! You set aside ${formatMoney(savings)} and still have ${formatMoney(left)} as a buffer. Nice work giving your dollars a plan.`;
+            elements.budgetResult.className = "result-message success";
           }
-
-          return { operation, first, second, answer };
         }
 
-        function makeChoices(answer) {
-          const choices = new Set([answer]);
-          while (choices.size < 4) {
-            const offset = randomInt(-10, 10);
-            if (offset !== 0 && answer + offset >= 0) choices.add(answer + offset);
-          }
-          return [...choices].sort(() => Math.random() - 0.5);
+        function resetBudget() {
+          budgetChecked = false;
+          document.querySelectorAll(".budget-option").forEach((button) => button.setAttribute("aria-pressed", "false"));
+          updateBudget();
         }
 
-        function updateProgress() {
-          const progress = (questionNumber / totalQuestions) * 100;
-          elements.progressFill.style.width = `${progress}%`;
-          elements.progressTrack.setAttribute("aria-valuenow", String(questionNumber));
-          elements.roundNumber.textContent = String(Math.min(questionNumber + 1, totalQuestions));
-        }
-
-        function showQuestion() {
-          answered = false;
-          elements.feedback.textContent = "";
-          elements.feedback.className = "feedback";
-          elements.actionRow.classList.add("hidden");
-          const question = makeQuestion();
-          correctAnswer = question.answer;
-          elements.question.textContent = `${question.first} ${question.operation} ${question.second}`;
-          elements.questionCategory.textContent = question.operation === "×" ? "Multiplication trail" : "Number trail";
-          elements.answers.replaceChildren(...makeChoices(correctAnswer).map((choice) => {
+        function renderRainRound() {
+          const round = rainMonths[rainMonthIndex];
+          elements.rainMonth.textContent = `MONTH ${rainMonthIndex + 1}`;
+          document.querySelector("#rain-event-title").textContent = round.title;
+          document.querySelector("#rain-event-description").textContent = round.description;
+          elements.rainDebt.textContent = `Month ${rainMonthIndex + 1} of ${rainMonths.length}`;
+          elements.rainOptions.replaceChildren();
+          [
+            { amount: 150, detail: "Keep $300 for extras" },
+            { amount: 300, detail: "Keep $150 for extras" },
+            { amount: 400, detail: "Keep $50 for extras" },
+          ].forEach((option) => {
             const button = document.createElement("button");
             button.type = "button";
-            button.className = "answer";
-            button.textContent = String(choice);
-            button.setAttribute("aria-label", `Answer ${choice}`);
-            button.addEventListener("click", () => checkAnswer(choice, button));
+            button.className = "rain-option";
+            button.dataset.amount = String(option.amount);
+            button.setAttribute("aria-pressed", "false");
+            const amount = document.createElement("strong");
+            amount.textContent = `Save ${formatMoney(option.amount)}`;
+            const detail = document.createElement("span");
+            detail.textContent = option.detail;
+            button.append(amount, detail);
+            button.addEventListener("click", () => {
+              rainContribution = option.amount;
+              elements.rainOptions.querySelectorAll(".rain-option").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+              elements.rainConfirm.disabled = false;
+              elements.rainResult.textContent = "";
+              elements.rainResult.className = "result-message";
+            });
+            elements.rainOptions.append(button);
+          });
+          rainContribution = null;
+          elements.rainConfirm.disabled = true;
+          elements.rainConfirm.textContent = "Make this month's move →";
+          elements.rainResult.textContent = "";
+          elements.rainResult.className = "result-message";
+          updateRainMeter();
+        }
+
+        function updateRainMeter() {
+          elements.rainBalance.textContent = formatMoney(rainBalance);
+          elements.rainFill.style.width = `${Math.min(100, (rainBalance / rainGoal) * 100)}%`;
+          elements.rainTrack.setAttribute("aria-valuenow", String(Math.min(rainGoal, rainBalance)));
+        }
+
+        function commitRainMove() {
+          if (rainContribution === null) {
+            elements.rainResult.textContent = "Choose how much to save before you move on.";
+            elements.rainResult.className = "result-message warning";
+            elements.rainConfirm.disabled = true;
+            return;
+          }
+          rainBalance += rainContribution;
+          const surprise = rainMonths[rainMonthIndex].surprise;
+          let message = `You saved ${formatMoney(rainContribution)}.`;
+          if (surprise) {
+            const paidFromFund = Math.min(rainBalance, surprise);
+            rainBalance -= paidFromFund;
+            const shortfall = surprise - paidFromFund;
+            if (shortfall > 0) rainDebt += shortfall;
+            message += ` The ${formatMoney(surprise)} surprise used ${formatMoney(paidFromFund)} from your fund`;
+            message += shortfall ? `, leaving ${formatMoney(shortfall)} to borrow.` : ". Your fund covered it!";
+          }
+          updateRainMeter();
+          rainMonthIndex += 1;
+          if (rainMonthIndex === rainMonths.length) {
+            elements.rainOptions.replaceChildren();
+            elements.rainConfirm.disabled = true;
+            elements.rainConfirm.textContent = "Challenge complete";
+            elements.rainDebt.textContent = rainDebt ? `${formatMoney(rainDebt)} borrowed` : "All 4 months complete";
+            const goalReached = rainBalance >= rainGoal;
+            const result = goalReached
+              ? `Challenge complete! Your fund is ${formatMoney(rainBalance)}, enough to meet the ${formatMoney(rainGoal)} goal${rainDebt ? `, with ${formatMoney(rainDebt)} borrowed for earlier costs` : ""}.`
+              : `Challenge complete! You built ${formatMoney(rainBalance)} in savings${rainDebt ? ` and borrowed ${formatMoney(rainDebt)} when a surprise was bigger than your fund` : ""}. Keep going—every dollar of cushion helps.`;
+            elements.rainResult.textContent = `${message} ${result}`;
+            elements.rainResult.className = `result-message ${goalReached && !rainDebt ? "success" : ""}`;
+          } else {
+            elements.rainMonth.textContent = `MONTH ${rainMonthIndex + 1}`;
+            elements.rainDebt.textContent = `Month ${rainMonthIndex + 1} of ${rainMonths.length}`;
+            elements.rainResult.textContent = message;
+            elements.rainResult.className = "result-message";
+            document.querySelector("#rain-event-title").textContent = rainMonths[rainMonthIndex].title;
+            document.querySelector("#rain-event-description").textContent = rainMonths[rainMonthIndex].description;
+            elements.rainOptions.querySelectorAll(".rain-option").forEach((button) => button.setAttribute("aria-pressed", "false"));
+            rainContribution = null;
+            elements.rainConfirm.disabled = true;
+          }
+        }
+
+        function resetRainGame() {
+          rainMonthIndex = 0;
+          rainBalance = 0;
+          rainDebt = 0;
+          rainContribution = null;
+          renderRainRound();
+        }
+
+        function updateQuizProgress() {
+          const questions = quizTopics[quizTopic].questions;
+          elements.quizNumber.textContent = String(Math.min(quizIndex + 1, questions.length));
+          elements.quizPoints.textContent = `${quizScore * 20} points`;
+          elements.quizScore.textContent = `${quizScore} / ${questions.length}`;
+          elements.quizStreak.textContent = `${quizStreak} 🔥`;
+          elements.quizScorePill.textContent = `${quizScore} correct so far`;
+          const progress = (quizIndex / questions.length) * 100;
+          elements.quizFill.style.width = `${progress}%`;
+          elements.quizTrack.setAttribute("aria-valuenow", String(quizIndex));
+        }
+
+        function showQuizQuestion() {
+          quizAnswered = false;
+          const topic = quizTopics[quizTopic];
+          const item = topic.questions[quizIndex];
+          elements.quizTopicTag.textContent = topic.label;
+          elements.quizQuestion.textContent = item.question;
+          elements.quizFeedback.textContent = "";
+          elements.quizFeedback.className = "quiz-feedback";
+          elements.quizNext.textContent = "Check answer";
+          elements.quizNext.disabled = true;
+          elements.quizOptions.replaceChildren(...item.options.map((text, index) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "quiz-answer";
+            button.dataset.answer = String(index);
+            const letter = document.createElement("span");
+            letter.className = "answer-letter";
+            letter.setAttribute("aria-hidden", "true");
+            letter.textContent = String.fromCharCode(65 + index);
+            const label = document.createElement("span");
+            label.textContent = text;
+            button.append(letter, label);
+            button.addEventListener("click", () => selectQuizAnswer(button));
             return button;
           }));
-          updateProgress();
-          elements.answers.querySelector("button").focus();
+          updateQuizProgress();
         }
 
-        function checkAnswer(choice, selectedButton) {
-          if (answered) return;
-          answered = true;
-          const buttons = [...elements.answers.querySelectorAll("button")];
-          buttons.forEach((button) => {
-            button.disabled = true;
-            if (Number(button.textContent) === correctAnswer) button.classList.add("correct");
+        function selectQuizAnswer(selected) {
+          if (quizAnswered) return;
+          elements.quizOptions.querySelectorAll(".quiz-answer").forEach((button) => {
+            button.setAttribute("aria-pressed", String(button === selected));
           });
+          elements.quizNext.disabled = false;
+        }
 
-          if (choice === correctAnswer) {
-            score += 10;
-            streak += 1;
-            elements.feedback.textContent = streak > 1
-              ? `That's right! ${streak} in a row — amazing!`
-              : "That's right! Great thinking!";
-            elements.feedback.classList.add("good");
-          } else {
-            streak = 0;
-            selectedButton.classList.add("incorrect");
-            elements.feedback.textContent = `Not quite! The answer is ${correctAnswer}. Keep going!`;
-            elements.feedback.classList.add("try-again");
+        function answerQuizQuestion() {
+          const topic = quizTopics[quizTopic];
+          if (!quizAnswered) {
+            const selected = elements.quizOptions.querySelector('[aria-pressed="true"]');
+            if (!selected) return;
+            quizAnswered = true;
+            const item = topic.questions[quizIndex];
+            const correct = Number(selected.dataset.answer) === item.answer;
+            elements.quizOptions.querySelectorAll(".quiz-answer").forEach((button) => {
+              button.disabled = true;
+              if (Number(button.dataset.answer) === item.answer) button.classList.add("correct");
+            });
+            if (correct) {
+              quizScore += 1;
+              quizStreak += 1;
+              elements.quizFeedback.textContent = `That's right! ${item.explanation}`;
+              elements.quizFeedback.classList.add("good");
+            } else {
+              quizStreak = 0;
+              selected.classList.add("incorrect");
+              elements.quizFeedback.textContent = `Not quite. ${item.explanation}`;
+              elements.quizFeedback.classList.add("try-again");
+            }
+            updateQuizProgress();
+            elements.quizNext.textContent = quizIndex === topic.questions.length - 1 ? "See my results →" : "Next question →";
+            elements.quizNext.focus();
+            return;
           }
-
-          elements.score.textContent = String(score);
-          elements.streak.textContent = String(streak);
-          questionNumber += 1;
-          updateProgress();
-          elements.nextButton.textContent = questionNumber === totalQuestions ? "See your results →" : "Next question →";
-          elements.actionRow.classList.remove("hidden");
-          elements.nextButton.focus();
-        }
-
-        function finishGame() {
-          elements.gameHeader.classList.add("hidden");
-          elements.progressArea.classList.add("hidden");
-          elements.questionArea.classList.add("hidden");
-          elements.answers.classList.add("hidden");
-          elements.feedback.classList.add("hidden");
-          elements.actionRow.classList.add("hidden");
-          const percentage = (score / (totalQuestions * 10)) * 100;
-          if (percentage === 100) {
-            elements.resultIcon.textContent = "🏆";
-            elements.resultTitle.textContent = "Perfect quest!";
-            elements.resultMessage.textContent = `You earned all ${score} stars. Your number skills are shining!`;
-          } else if (percentage >= 70) {
-            elements.resultIcon.textContent = "🌟";
-            elements.resultTitle.textContent = "Fantastic work!";
-            elements.resultMessage.textContent = `You earned ${score} stars. You're growing stronger with every question!`;
-          } else {
-            elements.resultIcon.textContent = "🌱";
-            elements.resultTitle.textContent = "Quest complete!";
-            elements.resultMessage.textContent = `You earned ${score} stars. Every adventure is a chance to learn — try again and see how you grow!`;
+          if (quizIndex === topic.questions.length - 1) {
+            finishQuiz();
+            return;
           }
-          elements.result.classList.add("visible");
-          elements.playAgainButton.focus();
+          quizIndex += 1;
+          showQuizQuestion();
         }
 
-        function startGame() {
-          questionNumber = 0;
-          score = 0;
-          streak = 0;
-          elements.score.textContent = "0";
-          elements.streak.textContent = "0";
-          elements.result.classList.remove("visible");
-          elements.gameHeader.classList.remove("hidden");
-          elements.progressArea.classList.remove("hidden");
-          elements.questionArea.classList.remove("hidden");
-          elements.answers.classList.remove("hidden");
-          elements.feedback.classList.remove("hidden");
-          elements.progressFill.style.width = "0%";
-          showQuestion();
+        function finishQuiz() {
+          const total = quizTopics[quizTopic].questions.length;
+          const percentage = quizScore / total;
+          document.querySelector("#quiz-active").hidden = true;
+          elements.quizResult.classList.add("visible");
+          if (percentage === 1) {
+            document.querySelector("#quiz-result-icon").textContent = "🏆";
+            document.querySelector("#quiz-result-title").textContent = "Money moves mastered!";
+            document.querySelector("#quiz-result-message").textContent = `You got all ${total} right on ${quizTopics[quizTopic].label}. Great work!`;
+          } else if (percentage >= 0.6) {
+            document.querySelector("#quiz-result-icon").textContent = "🌟";
+            document.querySelector("#quiz-result-title").textContent = "Nice work!";
+            document.querySelector("#quiz-result-message").textContent = `You got ${quizScore} out of ${total} on ${quizTopics[quizTopic].label}. Try again to practice the ones you missed.`;
+          } else {
+            document.querySelector("#quiz-result-icon").textContent = "🌱";
+            document.querySelector("#quiz-result-title").textContent = "That's a start!";
+            document.querySelector("#quiz-result-message").textContent = `You got ${quizScore} out of ${total} on ${quizTopics[quizTopic].label}. Give it another go—the explanations are here to help.`;
+          }
+          elements.quizAgain.focus();
         }
 
-        elements.nextButton.addEventListener("click", () => {
-          if (questionNumber === totalQuestions) finishGame();
-          else showQuestion();
+        function startQuiz() {
+          quizTopic = elements.topicSelect.value;
+          quizIndex = 0;
+          quizScore = 0;
+          quizStreak = 0;
+          elements.quizResult.classList.remove("visible");
+          document.querySelector("#quiz-active").hidden = false;
+          elements.quizSideTitle.textContent = quizTopics[quizTopic].label;
+          elements.quizSideDescription.textContent = "Each question comes with a quick explanation.";
+          showQuizQuestion();
+        }
+
+        document.querySelectorAll(".budget-option").forEach((button) => {
+          button.addEventListener("click", () => {
+            const row = button.closest(".budget-row");
+            row.querySelectorAll(".budget-option").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+            budgetChecked = false;
+            updateBudget();
+          });
         });
-        elements.playAgainButton.addEventListener("click", startGame);
-        elements.roundTotal.textContent = String(totalQuestions);
-        startGame();
+        elements.budgetCheck.addEventListener("click", checkBudget);
+        document.querySelector("#games-tab").addEventListener("click", () => {
+          document.querySelector("#games-tab").setAttribute("aria-selected", "true");
+          document.querySelector("#quiz-tab").setAttribute("aria-selected", "false");
+          document.querySelector("#games-panel").hidden = false;
+          document.querySelector("#quiz-panel").hidden = true;
+        });
+        document.querySelector("#quiz-tab").addEventListener("click", () => {
+          document.querySelector("#games-tab").setAttribute("aria-selected", "false");
+          document.querySelector("#quiz-tab").setAttribute("aria-selected", "true");
+          document.querySelector("#games-panel").hidden = true;
+          document.querySelector("#quiz-panel").hidden = false;
+        });
+        document.querySelectorAll(".game-choice").forEach((button) => {
+          button.addEventListener("click", () => {
+            const showBudget = button.dataset.game === "budget";
+            document.querySelectorAll(".game-choice").forEach((choice) => choice.setAttribute("aria-pressed", String(choice === button)));
+            document.querySelector("#budget-screen").hidden = !showBudget;
+            document.querySelector("#rainy-screen").hidden = showBudget;
+            elements.gameTip.textContent = showBudget
+              ? "A budget is a plan for your money—not a rulebook. Give every dollar a job, including some dollars for you."
+              : "An emergency fund is for the unexpected. Even a small cushion can mean borrowing less when life surprises you.";
+          });
+        });
+        elements.soloMode.addEventListener("click", () => { isClassMode = false; updateMode(); });
+        elements.classMode.addEventListener("click", () => { isClassMode = true; updateMode(); });
+        elements.rainConfirm.addEventListener("click", commitRainMove);
+        document.querySelector("#rain-reset").addEventListener("click", resetRainGame);
+        elements.topicSelect.addEventListener("change", startQuiz);
+        elements.quizNext.addEventListener("click", answerQuizQuestion);
+        elements.quizAgain.addEventListener("click", startQuiz);
+
+        updateBudget();
+        renderRainRound();
+        updateMode();
+        startQuiz();
       })();
     </script>
   </body>
