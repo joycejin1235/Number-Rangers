@@ -377,7 +377,7 @@
         <section class="game-layout" aria-label="Math Quest game">
           <div class="game-card">
             <div class="game-header" id="game-header">
-              <span class="round-label">Question <strong id="round-number">1</strong> of <strong id="round-total">10</strong></span>
+              <span class="round-label">Question <strong id="round-number">1</strong> of <strong id="round-total">3</strong></span>
               <span class="streak" aria-live="polite">🔥 <span id="streak">0</span> streak</span>
             </div>
             <div class="progress-area" id="progress-area">
@@ -386,7 +386,7 @@
                 role="progressbar"
                 aria-label="Quest progress"
                 aria-valuemin="0"
-                aria-valuemax="10"
+                aria-valuemax="3"
                 aria-valuenow="0"
                 id="progress-track"
               >
@@ -429,13 +429,13 @@
             </div>
           </aside>
         </section>
-        <p class="footer-note">Ten questions. No timer. Just you and your number skills.</p>
+        <p class="footer-note">Three questions. No timer. Just you and your number skills.</p>
       </main>
     </div>
 
     <script>
       (() => {
-        const totalQuestions = 10;
+        const totalQuestions = 3;
         const elements = {
           actionRow: document.querySelector("#action-row"),
           answers: document.querySelector("#answers"),
