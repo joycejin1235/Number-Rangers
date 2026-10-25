@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f5f8ef">
+    <title>Number Rangers — Math Quest</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18382e;
+        --muted: #668077;
+        --green: #26734f;
+        --green-dark: #1d5d40;
+        --lime: #d9f27b;
+        --paper: #fffefa;
+        --canvas: #f5f8ef;
+        --line: #e4eadc;
+        --orange: #e9894c;
+        --shadow: 0 18px 55px rgb(35 72 49 / 10%);
+        font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        min-width: 320px;
+        min-height: 100vh;
+        margin: 0;
+        color: var(--ink);
+        background:
+          radial-gradient(ellipse at 5% 10%, rgb(217 242 123 / 28%), transparent 27rem),
+          radial-gradient(ellipse at 95% 90%, rgb(196 229 195 / 32%), transparent 30rem),
+          var(--canvas);
+      }
+
+      button { font: inherit; }
+
+      .page {
+        width: min(100% - 36px, 1080px);
+        margin-inline: auto;
+      }
+
+      .topbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-block: 25px;
+      }
+
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 11px;
+        color: var(--ink);
+        font-size: 1.08rem;
+        font-weight: 900;
+        letter-spacing: -.035em;
+        text-decoration: none;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 39px;
+        height: 39px;
+        place-items: center;
+        border-radius: 13px;
+        background: var(--lime);
+        font-size: 1.3rem;
+      }
+
+      .top-note {
+        color: var(--muted);
+        font-size: .9rem;
+        font-weight: 700;
+      }
+
+      main { padding-block: 22px 64px; }
+
+      .intro {
+        max-width: 660px;
+        margin: 0 auto 27px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-bottom: 10px;
+        color: var(--green);
+        font-size: .76rem;
+        font-weight: 900;
+        letter-spacing: .15em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2.25rem, 5vw, 3.75rem);
+        font-weight: 900;
+        letter-spacing: -.065em;
+        line-height: 1.02;
+      }
+
+      .intro p {
+        max-width: 480px;
+        margin: 13px auto 0;
+        color: var(--muted);
+        font-size: 1.03rem;
+        line-height: 1.6;
+      }
+
+      .game-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 245px;
+        gap: 19px;
+        align-items: stretch;
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      .game-card, .side-card {
+        border: 1px solid rgb(228 234 220 / 85%);
+        border-radius: 25px;
+        background: var(--paper);
+        box-shadow: var(--shadow);
+      }
+
+      .game-card { padding: clamp(21px, 4vw, 36px); }
+
+      .game-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 13px;
+      }
+
+      .round-label {
+        color: var(--muted);
+        font-size: .87rem;
+        font-weight: 800;
+      }
+
+      .round-label strong { color: var(--ink); }
+
+      .streak {
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: #fff3e7;
+        color: #a35424;
+        font-size: .84rem;
+        font-weight: 900;
+      }
+
+      .progress-track {
+        height: 9px;
+        overflow: hidden;
+        border-radius: 99px;
+        background: #edf1e7;
+      }
+
+      .progress-fill {
+        width: 0;
+        height: 100%;
+        border-radius: inherit;
+        background: linear-gradient(90deg, #80bd57, #b6d959);
+        transition: width .35s ease;
+      }
+
+      .question-area {
+        min-height: 185px;
+        display: grid;
+        align-content: center;
+        justify-items: center;
+        padding-block: 24px 19px;
+        text-align: center;
+      }
+
+      .question-category {
+        margin-bottom: 10px;
+        color: var(--green);
+        font-size: .74rem;
+        font-weight: 900;
+        letter-spacing: .13em;
+        text-transform: uppercase;
+      }
+
+      .question {
+        margin: 0;
+        font-size: clamp(2.8rem, 9vw, 4.5rem);
+        font-weight: 900;
+        letter-spacing: -.07em;
+        line-height: 1;
+      }
+
+      .question-instruction {
+        margin: 11px 0 0;
+        color: var(--muted);
+        font-size: .95rem;
+      }
+
+      .answers {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 11px;
+      }
+
+      .answer {
+        min-height: 58px;
+        border: 2px solid var(--line);
+        border-radius: 15px;
+        background: #fff;
+        color: var(--ink);
+        cursor: pointer;
+        font-size: 1.13rem;
+        font-weight: 900;
+        transition: border-color .15s ease, background .15s ease, transform .15s ease;
+      }
+
+      .answer:not(:disabled):hover {
+        transform: translateY(-2px);
+        border-color: #a5cd81;
+        background: #f7faef;
+      }
+
+      .answer:focus-visible, .action-button:focus-visible {
+        outline: 3px solid #e9a568;
+        outline-offset: 3px;
+      }
+
+      .answer:disabled { cursor: default; }
+      .answer.correct { border-color: #6caf72; background: #edf8e9; color: #27613b; }
+      .answer.incorrect { border-color: #e49a76; background: #fff0e9; color: #984a2b; }
+
+      .feedback {
+        min-height: 31px;
+        margin: 15px 0 0;
+        color: var(--muted);
+        font-size: .93rem;
+        font-weight: 800;
+        text-align: center;
+      }
+
+      .feedback.good { color: #26734f; }
+      .feedback.try-again { color: #a35424; }
+
+      .action-row {
+        display: flex;
+        justify-content: center;
+        padding-top: 2px;
+      }
+
+      .action-button {
+        min-height: 49px;
+        padding: 0 23px;
+        border: 0;
+        border-radius: 14px;
+        background: var(--green);
+        color: white;
+        cursor: pointer;
+        font-weight: 900;
+        transition: background .15s ease, transform .15s ease;
+      }
+
+      .action-button:hover { transform: translateY(-1px); background: var(--green-dark); }
+
+      .side-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 22px;
+        padding: 25px 21px;
+      }
+
+      .guide {
+        display: grid;
+        min-height: 156px;
+        place-items: center;
+        border-radius: 19px;
+        background: #f1f6e5;
+        font-size: 5rem;
+      }
+
+      .side-card h2 {
+        margin: 19px 0 7px;
+        font-size: 1.17rem;
+        letter-spacing: -.035em;
+      }
+
+      .side-card p {
+        margin: 0;
+        color: var(--muted);
+        font-size: .9rem;
+        line-height: 1.55;
+      }
+
+      .score-box {
+        padding: 15px;
+        border-radius: 16px;
+        background: #f7f8f2;
+      }
+
+      .score-caption {
+        color: var(--muted);
+        font-size: .75rem;
+        font-weight: 900;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+      }
+
+      .score-value {
+        margin-top: 3px;
+        font-size: 2rem;
+        font-weight: 900;
+        letter-spacing: -.06em;
+      }
+
+      .result {
+        display: none;
+        padding-block: 12px 5px;
+        text-align: center;
+      }
+
+      .result.visible { display: block; }
+      .result-icon { font-size: 3.4rem; }
+      .result h2 { margin: 8px 0; font-size: 1.8rem; letter-spacing: -.05em; }
+      .result p { margin: 0 0 18px; color: var(--muted); line-height: 1.6; }
+
+      .answers.hidden, .question-area.hidden, .progress-area.hidden,
+      .game-header.hidden, .feedback.hidden, .action-row.hidden { display: none; }
+
+      .footer-note {
+        margin-top: 22px;
+        color: var(--muted);
+        font-size: .8rem;
+        text-align: center;
+      }
+
+      @media (max-width: 700px) {
+        .page { width: min(100% - 26px, 540px); }
+        .topbar { padding-block: 17px; }
+        .top-note { font-size: .78rem; }
+        main { padding-top: 17px; }
+        .intro { margin-bottom: 21px; }
+        .intro p { font-size: .95rem; }
+        .game-layout { grid-template-columns: 1fr; }
+        .game-card { padding: 22px 18px; }
+        .side-card { display: grid; grid-template-columns: 84px 1fr; gap: 13px; align-items: center; padding: 15px; }
+        .guide { min-height: 84px; font-size: 3rem; }
+        .side-card h2 { margin: 0 0 4px; }
+        .score-box { grid-column: 1 / -1; display: flex; align-items: center; justify-content: space-between; }
+        .score-value { margin: 0; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Number Rangers home">
+          <span class="brand-mark" aria-hidden="true">🌱</span>
+          <span>Number Rangers</span>
+        </a>
+        <span class="top-note">A little practice goes a long way ✨</span>
+      </header>
+
+      <main>
+        <section class="intro" aria-labelledby="page-title">
+          <span class="eyebrow">Your next math adventure</span>
+          <h1 id="page-title">Ready, Ranger?</h1>
+          <p>Solve the number puzzles, build your streak, and help your forest friends grow.</p>
+        </section>
+
+        <section class="game-layout" aria-label="Math Quest game">
+          <div class="game-card">
+            <div class="game-header" id="game-header">
+              <span class="round-label">Question <strong id="round-number">1</strong> of <strong id="round-total">10</strong></span>
+              <span class="streak" aria-live="polite">🔥 <span id="streak">0</span> streak</span>
+            </div>
+            <div class="progress-area" id="progress-area">
+              <div
+                class="progress-track"
+                role="progressbar"
+                aria-label="Quest progress"
+                aria-valuemin="0"
+                aria-valuemax="10"
+                aria-valuenow="0"
+                id="progress-track"
+              >
+                <div class="progress-fill" id="progress-fill"></div>
+              </div>
+            </div>
+
+            <div class="question-area" id="question-area" aria-live="polite">
+              <span class="question-category" id="question-category">Quick sums</span>
+              <p class="question" id="question">7 + 5</p>
+              <p class="question-instruction">Pick the right answer!</p>
+            </div>
+
+            <div class="answers" id="answers" aria-label="Answer choices"></div>
+            <p class="feedback" id="feedback" aria-live="polite"></p>
+            <div class="action-row hidden" id="action-row">
+              <button class="action-button" id="next-button" type="button">Next question →</button>
+            </div>
+
+            <div class="result" id="result" aria-live="polite">
+              <div class="result-icon" id="result-icon" aria-hidden="true">🌟</div>
+              <h2 id="result-title">Quest complete!</h2>
+              <p id="result-message"></p>
+              <button class="action-button" id="play-again-button" type="button">Play again ↻</button>
+            </div>
+          </div>
+
+          <aside class="side-card" aria-label="Ranger guide and score">
+            <div class="guide" aria-hidden="true">🦊</div>
+            <div>
+              <h2>Your forest guide</h2>
+              <p>Take your time, trust your thinking, and keep going!</p>
+            </div>
+            <div class="score-box">
+              <div>
+                <div class="score-caption">Stars earned</div>
+                <div class="score-value" id="score">0</div>
+              </div>
+              <span aria-hidden="true">⭐</span>
+            </div>
+          </aside>
+        </section>
+        <p class="footer-note">Ten questions. No timer. Just you and your number skills.</p>
+      </main>
+    </div>
+
+    <script>
+      (() => {
+        const totalQuestions = 10;
+        const elements = {
+          actionRow: document.querySelector("#action-row"),
+          answers: document.querySelector("#answers"),
+          feedback: document.querySelector("#feedback"),
+          gameHeader: document.querySelector("#game-header"),
+          nextButton: document.querySelector("#next-button"),
+          progressArea: document.querySelector("#progress-area"),
+          progressFill: document.querySelector("#progress-fill"),
+          progressTrack: document.querySelector("#progress-track"),
+          question: document.querySelector("#question"),
+          questionArea: document.querySelector("#question-area"),
+          questionCategory: document.querySelector("#question-category"),
+          result: document.querySelector("#result"),
+          resultIcon: document.querySelector("#result-icon"),
+          resultMessage: document.querySelector("#result-message"),
+          resultTitle: document.querySelector("#result-title"),
+          roundNumber: document.querySelector("#round-number"),
+          roundTotal: document.querySelector("#round-total"),
+          score: document.querySelector("#score"),
+          streak: document.querySelector("#streak"),
+          playAgainButton: document.querySelector("#play-again-button"),
+        };
+
+        let questionNumber = 0;
+        let score = 0;
+        let streak = 0;
+        let correctAnswer = 0;
+        let answered = false;
+
+        const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        function makeQuestion() {
+          const operations = ["+", "−", "×"];
+          const operation = operations[randomInt(0, operations.length - 1)];
+          let first;
+          let second;
+          let answer;
+
+          if (operation === "+") {
+            first = randomInt(2, 30);
+            second = randomInt(2, 20);
+            answer = first + second;
+          } else if (operation === "−") {
+            first = randomInt(5, 40);
+            second = randomInt(1, first);
+            answer = first - second;
+          } else {
+            first = randomInt(2, 12);
+            second = randomInt(2, 10);
+            answer = first * second;
+          }
+
+          return { operation, first, second, answer };
+        }
+
+        function makeChoices(answer) {
+          const choices = new Set([answer]);
+          while (choices.size < 4) {
+            const offset = randomInt(-10, 10);
+            if (offset !== 0 && answer + offset >= 0) choices.add(answer + offset);
+          }
+          return [...choices].sort(() => Math.random() - 0.5);
+        }
+
+        function updateProgress() {
+          const progress = (questionNumber / totalQuestions) * 100;
+          elements.progressFill.style.width = `${progress}%`;
+          elements.progressTrack.setAttribute("aria-valuenow", String(questionNumber));
+          elements.roundNumber.textContent = String(Math.min(questionNumber + 1, totalQuestions));
+        }
+
+        function showQuestion() {
+          answered = false;
+          elements.feedback.textContent = "";
+          elements.feedback.className = "feedback";
+          elements.actionRow.classList.add("hidden");
+          const question = makeQuestion();
+          correctAnswer = question.answer;
+          elements.question.textContent = `${question.first} ${question.operation} ${question.second}`;
+          elements.questionCategory.textContent = question.operation === "×" ? "Multiplication trail" : "Number trail";
+          elements.answers.replaceChildren(...makeChoices(correctAnswer).map((choice) => {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "answer";
+            button.textContent = String(choice);
+            button.setAttribute("aria-label", `Answer ${choice}`);
+            button.addEventListener("click", () => checkAnswer(choice, button));
+            return button;
+          }));
+          updateProgress();
+          elements.answers.querySelector("button").focus();
+        }
+
+        function checkAnswer(choice, selectedButton) {
+          if (answered) return;
+          answered = true;
+          const buttons = [...elements.answers.querySelectorAll("button")];
+          buttons.forEach((button) => {
+            button.disabled = true;
+            if (Number(button.textContent) === correctAnswer) button.classList.add("correct");
+          });
+
+          if (choice === correctAnswer) {
+            score += 10;
+            streak += 1;
+            elements.feedback.textContent = streak > 1
+              ? `That's right! ${streak} in a row — amazing!`
+              : "That's right! Great thinking!";
+            elements.feedback.classList.add("good");
+          } else {
+            streak = 0;
+            selectedButton.classList.add("incorrect");
+            elements.feedback.textContent = `Not quite! The answer is ${correctAnswer}. Keep going!`;
+            elements.feedback.classList.add("try-again");
+          }
+
+          elements.score.textContent = String(score);
+          elements.streak.textContent = String(streak);
+          questionNumber += 1;
+          updateProgress();
+          elements.nextButton.textContent = questionNumber === totalQuestions ? "See your results →" : "Next question →";
+          elements.actionRow.classList.remove("hidden");
+          elements.nextButton.focus();
+        }
+
+        function finishGame() {
+          elements.gameHeader.classList.add("hidden");
+          elements.progressArea.classList.add("hidden");
+          elements.questionArea.classList.add("hidden");
+          elements.answers.classList.add("hidden");
+          elements.feedback.classList.add("hidden");
+          elements.actionRow.classList.add("hidden");
+          const percentage = (score / (totalQuestions * 10)) * 100;
+          if (percentage === 100) {
+            elements.resultIcon.textContent = "🏆";
+            elements.resultTitle.textContent = "Perfect quest!";
+            elements.resultMessage.textContent = `You earned all ${score} stars. Your number skills are shining!`;
+          } else if (percentage >= 70) {
+            elements.resultIcon.textContent = "🌟";
+            elements.resultTitle.textContent = "Fantastic work!";
+            elements.resultMessage.textContent = `You earned ${score} stars. You're growing stronger with every question!`;
+          } else {
+            elements.resultIcon.textContent = "🌱";
+            elements.resultTitle.textContent = "Quest complete!";
+            elements.resultMessage.textContent = `You earned ${score} stars. Every adventure is a chance to learn — try again and see how you grow!`;
+          }
+          elements.result.classList.add("visible");
+          elements.playAgainButton.focus();
+        }
+
+        function startGame() {
+          questionNumber = 0;
+          score = 0;
+          streak = 0;
+          elements.score.textContent = "0";
+          elements.streak.textContent = "0";
+          elements.result.classList.remove("visible");
+          elements.gameHeader.classList.remove("hidden");
+          elements.progressArea.classList.remove("hidden");
+          elements.questionArea.classList.remove("hidden");
+          elements.answers.classList.remove("hidden");
+          elements.feedback.classList.remove("hidden");
+          elements.progressFill.style.width = "0%";
+          showQuestion();
+        }
+
+        elements.nextButton.addEventListener("click", () => {
+          if (questionNumber === totalQuestions) finishGame();
+          else showQuestion();
+        });
+        elements.playAgainButton.addEventListener("click", startGame);
+        elements.roundTotal.textContent = String(totalQuestions);
+        startGame();
+      })();
+    </script>
+  </body>
+</html>
